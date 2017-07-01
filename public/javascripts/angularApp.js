@@ -182,7 +182,7 @@ app.controller('HomeCtrl', [
         $scope.currentUser = {};
         // $scope.currentUser = $rootScope.currentUser || null;
         $scope.chat = chat;
-
+        $scope.message = {};
         $scope.gameSettings = {
             // preset board size options
             boardSizes: [3, 4, 5, 6],
@@ -191,7 +191,11 @@ app.controller('HomeCtrl', [
         }
 
 
-        socket.emit('request-userlist', $scope.currentUser);
+        socket.emit('request-userlist', null);
+
+        $scope.isTyping = function () {
+            socket.emit('user-typing', { username: $scope.currentUser.username, body: $scope.message.body });
+        }
 
         $scope.join = function () {
             $scope.currentUser.player = $scope.loggedUsers.length ? 'X' : 'O';
@@ -219,7 +223,7 @@ app.controller('HomeCtrl', [
         socket.on('add-user', function (data) {
             // alert(JSON.stringify(data))
             if ($scope.currentUser.username === data.user.username) { $scope.currentUser.logged = true; }
-            $scope.loggedUsers.push({ id: data.id, username: data.user.username, symbol:data.user.player });
+            $scope.loggedUsers.push({ id: data.id, username: data.user.username, symbol: data.user.player });
             // $scope.$apply(function () {
             // });
         });
@@ -261,7 +265,14 @@ app.controller('HomeCtrl', [
             $scope.tictactoe.updateBoard(data.moveInfo.loc, data.moveInfo.player);
         });
 
+        socket.on('show-typing', function (data) {
+            if (data.body.length) { $scope.message.placeholder = data.username + " is typing...."; }
+            else { $scope.message.placeholder = ""; }
+        });
+
+
         socket.on('add-message', function (data) {
+            $scope.message.placeholder = '';
             $scope.chat.postMessage(data.msgInfo);
         });
 

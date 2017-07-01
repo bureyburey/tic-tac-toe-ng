@@ -36,6 +36,15 @@ io.on('connection', function (socket) {
         });
     });
 
+    socket.on('user-typing', function (data) {
+        // request list of currently logged users
+        io.emit('show-typing', {
+            message: 'show-typing',
+            username:data.username,
+            body:data.body
+        });
+    });
+
     socket.on('response-userlist', function (userlist) {
         io.emit('get-userlist', {
             message: 'get-userlist',

@@ -92,7 +92,7 @@
 
       <div id="chatContainer">
         <h3>Chat: </h3>
-        <input ng-model="message.body" />
+        <input ng-change="isTyping();" placeholder="{{message.placeholder}}" ng-model="message.body" />
         <button ng-click="postMessage();">Post Message</button>
         <hr>
         <div ng-repeat="message in chat.messages">
