@@ -34,7 +34,7 @@ app.factory('tictactoe', function ($rootScope) {
 
     obj.resetGame = function (rowSize) {
         obj.rowSize = rowSize;
-        obj.gameBoard = (new Array(obj.rowSize * obj.rowSize)).fill('-');
+        obj.gameBoard = (new Array(obj.rowSize * obj.rowSize)).fill({value:'-'});
         obj.turn = 'o';
         obj.winner = null;
         obj.winCode = '';
@@ -161,7 +161,7 @@ app.factory('chat', function () {
         messages: []
     }
     obj.postMessage = function (data) {
-        obj.messages.push({
+        obj.messages.unshift({
             username: data.username,
             body: data.body,
             time: new Date()
@@ -211,6 +211,7 @@ app.controller('HomeCtrl', [
 
         $scope.postMessage = function () {
             socket.emit('post-message', { username: $scope.currentUser.username, body: $scope.message.body });
+            $scope.message.body = '';
         }
 
         socket.on('add-user', function (data) {
