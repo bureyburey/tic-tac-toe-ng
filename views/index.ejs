@@ -5,6 +5,8 @@
   <title>
     <%= title %>
   </title>
+  <script src="/static_components/array-polyfills/find-index.js"></script>
+  <script src="/static_components/array-polyfills/index-of.js"></script>
   <script src="/node_modules/angular/angular.js"></script>
   <script src="/node_modules/angular-ui-router/release/angular-ui-router.min.js"></script>
   <script src="/javascripts/angularApp.js"></script>
@@ -50,7 +52,7 @@
     <!-- rest of template -->
 
     <h4>Logged Users</h4>
-    <!--{{loggedUsers}}-->
+    {{loggedUsers}}
     <ul>
       <li ng-repeat="user in loggedUsers">{{user.username}}</li>
     </ul>
@@ -62,7 +64,7 @@
     </div>
     <br/>
 
-    <div ng-show="currentUser.logged === true && currentUser.player === 'o' && !gameSettings.gameInProgress">
+    <div ng-show="currentUser.logged === true && currentUser.player === 'O' && !gameSettings.gameInProgress">
       <h3>Game Settings Menu</h3>
 
       <select ng-model="gameSettings.selectedBoardSize" ng-options="(boardSize + ' x ' + boardSize) for boardSize in gameSettings.boardSizes">
@@ -80,10 +82,13 @@
       </div>
       <h3 ng-style="{'color': tictactoe.turn === currentUser.player? 'green':'red'}">{{currentUser.username}} - {{currentUser.player}}</h3>
       <div id="boardContainer" ng-if="tictactoe.gameBoard.length">
-        <div style="display:inline;" ng-repeat="tile in tictactoe.gameBoard track by $index">
+        <span style="display:inline;" ng-repeat="tile in tictactoe.gameBoard track by $index">
           <br ng-if="$index % gameSettings.selectedBoardSize === 0">
-          <button class="btn-primary btn-lg gameTile" ng-click="updateBoard($index);">{{tile}}</button>
-        </div>
+          <!--<button class="btn-primary btn-lg gameTile" ng-click="updateBoard($index);"><b>{{tile.value}}</b></button>-->
+        <button ng-class="{'btn-success btn-lg gameTile': tile.value==='-','btn-danger btn-lg gameTile':tile.value == 'O', 'btn-primary btn-lg gameTile': tile.value==='X'}" ng-click="updateBoard($index);"><b>{{tile.value}}</b></button>
+       
+        
+        </span>
       </div>
 
       <div id="chatContainer">
@@ -92,8 +97,7 @@
         <button ng-click="postMessage();">Post Message</button>
         <hr>
         <div ng-repeat="message in chat.messages">
-          {{ message.time | date :  "dd.MM.y - HH:mm" }}<br>
-          {{message.username}}: {{message.body}}
+          {{ message.time | date : "dd.MM.y - HH:mm" }}<br> {{message.username}}: {{message.body}}
           <hr>
         </div>
       </div>

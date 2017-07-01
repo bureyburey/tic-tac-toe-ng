@@ -34,8 +34,8 @@ app.factory('tictactoe', function ($rootScope) {
 
     obj.resetGame = function (rowSize) {
         obj.rowSize = rowSize;
-        obj.gameBoard = (new Array(obj.rowSize * obj.rowSize)).fill({value:'-'});
-        obj.turn = 'o';
+        obj.gameBoard = (new Array(obj.rowSize * obj.rowSize)).fill({ value: '-' });
+        obj.turn = 'O';
         obj.winner = null;
         obj.winCode = '';
     }
@@ -46,7 +46,7 @@ app.factory('tictactoe', function ($rootScope) {
         // check rows
         for (let i = 0; i < SIZE * SIZE; i++) {
             // encountered player piece --> increase counter
-            if (obj.gameBoard[i] === player)
+            if (obj.gameBoard[i].value === player)
                 count++;
             else // SIZE is broken --> reset the counter
                 count = 0;
@@ -63,7 +63,7 @@ app.factory('tictactoe', function ($rootScope) {
         // check columns
         for (let i = 0, col = 0; i < SIZE * SIZE; i++) {
             // encountered player piece --> increase counter
-            if (obj.gameBoard[col + (i % SIZE) * SIZE] === player)
+            if (obj.gameBoard[col + (i % SIZE) * SIZE].value === player)
                 count++;
             else // SIZE is broken --> reset the counter
                 count = 0;
@@ -88,7 +88,7 @@ app.factory('tictactoe', function ($rootScope) {
             // (+SIZE will result in getting the next row, +1 will result in one index to the right)
             for (let j = i; j < SIZE * SIZE; j += SIZE + 1) {
                 // count player pieces
-                if (obj.gameBoard[j] === player)
+                if (obj.gameBoard[j].value === player)
                     count++;
                 else // reset the counter if the SIZE is broken
                     count = 0;
@@ -111,7 +111,7 @@ app.factory('tictactoe', function ($rootScope) {
             // (-SIZE will result in getting the previous row, -1 will result in one index to the left)
             for (let j = i; j > 0; j -= (SIZE - 1)) {
                 // count player pieces
-                if (obj.gameBoard[j] === player)
+                if (obj.gameBoard[j].value === player)
                     count++;
                 else // reset the counter if the SIZE is broken
                     count = 0;
@@ -127,7 +127,7 @@ app.factory('tictactoe', function ($rootScope) {
         // check draw
         for (let i = 0; i < SIZE * SIZE; i++) {
             // if encountered a blank location, return 0 meaning the game can still be played
-            if (obj.gameBoard[i] !== 'o' && obj.gameBoard[i] !== 'x')
+            if (obj.gameBoard[i].value !== 'O' && obj.gameBoard[i].value !== 'X')
                 return 0;
         }
         // none of the above returns invoked --> game ended as a draw
@@ -135,12 +135,12 @@ app.factory('tictactoe', function ($rootScope) {
     }
 
     obj.updateBoard = function (loc, player) {
-        if (obj.gameBoard[loc] === 'x' || obj.gameBoard[loc] === 'o' || obj.winner || obj.turn !== player) { return; }
-        obj.gameBoard[loc] = player;
+        if (obj.gameBoard[loc].value === 'X' || obj.gameBoard[loc].value === 'O' || obj.winner || obj.turn !== player) { return; }
 
+        obj.gameBoard[loc] = { value: player };
 
-        if (obj.turn === 'x') { obj.turn = 'o' }
-        else { obj.turn = 'x' }
+        if (obj.turn === 'X') { obj.turn = 'O' }
+        else { obj.turn = 'X' }
 
         let result = obj.checkWin(player);
 
@@ -191,8 +191,10 @@ app.controller('HomeCtrl', [
         }
 
 
+        socket.emit('request-userlist', $scope.currentUser);
+
         $scope.join = function () {
-            $scope.currentUser.player = $scope.loggedUsers.length ? 'x' : 'o';
+            $scope.currentUser.player = $scope.loggedUsers.length ? 'X' : 'O';
             // $rootScope.currentUser = $scope.currentUser;
             socket.emit('user-joined', $scope.currentUser);
         };
@@ -217,16 +219,35 @@ app.controller('HomeCtrl', [
         socket.on('add-user', function (data) {
             // alert(JSON.stringify(data))
             if ($scope.currentUser.username === data.user.username) { $scope.currentUser.logged = true; }
-            $scope.loggedUsers.push(data.user);
+            $scope.loggedUsers.push({ id: data.id, username: data.user.username, symbol:data.user.player });
             // $scope.$apply(function () {
             // });
         });
 
+        socket.on('remove-user', function (data) {
+            var index = $scope.loggedUsers.findIndex(function (user) {
+                return data.id === user.id;
+            });
+            if (index > -1) { $scope.loggedUsers.splice(index, 1); }
+        });
+
         socket.on('confirm-reset', function (data) {
-            if(data.req.initiatedBy !== $scope.currentUser.username){
-                if(confirm("User " + data.req.initiatedBy + " Initiated Game Reset\nReset Game?")){
+            if (data.req.initiatedBy !== $scope.currentUser.username) {
+                if (confirm("User " + data.req.initiatedBy + " Initiated Game Reset\nReset Game?")) {
                     $scope.resetGame();
                 }
+            }
+        });
+
+        socket.on('send-userlist', function (data) {
+            if ($scope.loggedUsers.length) {
+                socket.emit('response-userlist', $scope.loggedUsers);
+            }
+        });
+
+        socket.on('get-userlist', function (data) {
+            if (!$scope.loggedUsers.length) {
+                $scope.loggedUsers = data.userlist;
             }
         });
 
