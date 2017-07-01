@@ -216,7 +216,7 @@ app.controller('HomeCtrl', [
 
         socket.on('add-user', function (data) {
             // alert(JSON.stringify(data))
-            if ($scope.currentUser.username) { $scope.currentUser.logged = true; }
+            if ($scope.currentUser.username === data.user.username) { $scope.currentUser.logged = true; }
             $scope.loggedUsers.push(data.user);
             // $scope.$apply(function () {
             // });
