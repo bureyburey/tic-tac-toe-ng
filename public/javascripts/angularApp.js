@@ -222,7 +222,13 @@ app.controller('HomeCtrl', [
 
         socket.on('add-user', function (data) {
             // alert(JSON.stringify(data))
-            if ($scope.currentUser.username === data.user.username) { $scope.currentUser.logged = true; }
+            // var index = $scope.loggedUsers.findIndex(function (user) {
+            //     return data.id === user.id;
+            // });
+            if ($scope.currentUser.username === data.user.username) { 
+                $scope.currentUser.logged = true; 
+                $scope.currentUser.id = data.id;
+            }
             $scope.loggedUsers.push({ id: data.id, username: data.user.username, symbol: data.user.player });
             // $scope.$apply(function () {
             // });
