@@ -1,0 +1,84 @@
+body {
+  /*padding: 50px;*/
+  /*font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;*/
+}
+
+a {
+  color: #00B7FF;
+}
+
+#gameContainer{
+    /*display: inline;*/
+    position:relative;
+    /*border:1px solid;*/
+    padding:20px;
+}
+
+#boardContainer{
+    display: inline-block;
+    width:auto;
+    position: absolute;
+    top: 60px;
+    left: 16px;
+
+    border:1px solid;
+    padding:10px;
+    border-radius:10%;
+}
+
+#chatContainer{
+    display: inline-block;
+
+    position: absolute;
+    top: 10px;
+    right: 16px;
+    width:50%;
+    text-align: center;
+    border:1px solid;
+    border-radius:10%;
+}
+
+.gameTile{
+    /*border:2px solid;
+    background-color: lightgray;
+    display:inline-block;
+    text-align: center;
+    font-family: "Consolas";
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    min-height: 40px;
+    padding-top:20px;
+    padding-bottom:20px;*/
+    display:inline-block;
+    margin:3px;
+}
+
+/*NAVIGATION BAR CSS*/
+
+.nav ul {
+    list-style-type: none;
+    margin-left: 20%;
+    margin-right:20%;
+    margin-top:1%;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+}
+
+.nav li {
+    float: left;
+}
+
+.nav li  a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+/* Change the link color to #111 (black) on hover */
+.nav li a:hover {
+    background-color: #111;
+}
