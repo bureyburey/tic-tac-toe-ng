@@ -47,7 +47,7 @@
 
   <script type="text/ng-template" id="/home.html">
     <div class="page-header">
-      <h1>Home</h1>
+      <h2>Tic-Tac-Toe AngularJS</h2>
     </div>
     <!-- rest of template -->
 
@@ -65,7 +65,6 @@
 
     <div ng-show="currentUser.logged === true && currentUser.player === 'O' && !gameSettings.gameInProgress">
       <h3>Game Settings Menu</h3>
-
       <select ng-model="gameSettings.selectedBoardSize" ng-options="(boardSize + ' x ' + boardSize) for boardSize in gameSettings.boardSizes">
         <option value="">Board Size:</option>
       </select>
@@ -74,15 +73,16 @@
       </div>
     </div>
 
-
     <div id="gameContainer" ng-show="currentUser.logged === true">
+      
       <div>
         <button ng-click="requestReset();" ng-show="gameSettings.gameInProgress">Request Game Reset</button>
       </div>
-      <h3 ng-style="{'color': tictactoe.turn === currentUser.player? 'green':'red'}">{{currentUser.username}} - {{currentUser.player}}</h3>
+      <h3 style="margin:0px;" ng-show="currentUser.logged" ng-style="{'color': tictactoe.turn === currentUser.player? 'green':'red'}">{{currentUser.username}} - {{currentUser.player}}</h3>
+      <!--<h3 ng-style="{'color': tictactoe.turn === currentUser.player? 'green':'red'}">{{currentUser.username}} - {{currentUser.player}}</h3>-->
       <div id="boardContainer" ng-if="tictactoe.gameBoard.length">
         <span style="display:inline;" ng-repeat="tile in tictactoe.gameBoard track by $index">
-          <br ng-if="$index % gameSettings.selectedBoardSize === 0">
+          <br class="newline-board" ng-if="$index % gameSettings.selectedBoardSize === 0">
           <!--<button class="btn-primary btn-lg gameTile" ng-click="updateBoard($index);"><b>{{tile.value}}</b></button>-->
         <button ng-class="{'btn-success btn-lg gameTile': tile.value==='-','btn-danger btn-lg gameTile':tile.value == 'O', 'btn-primary btn-lg gameTile': tile.value==='X'}" ng-click="updateBoard($index);"><b>{{tile.value}}</b></button>
        

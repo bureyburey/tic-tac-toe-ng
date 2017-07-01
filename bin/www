@@ -21,14 +21,14 @@ app.set('port', port);
 
 var server = http.createServer(app);
 
-
 /**
  * Socket.io
+ * requires socket API file /routes/socketAPI.js
+ * then attaches the server to io
  */
-var socketAPI = require('../socketAPI');
+var socketAPI = require('../routes/socketAPI');
 var io = socketAPI.io;
 io.attach(server);
-
 
 /**
  * Listen on provided port, on all network interfaces.

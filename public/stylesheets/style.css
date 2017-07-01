@@ -18,7 +18,8 @@ a {
     display: inline-block;
     width:auto;
     position: absolute;
-    top: 60px;
+    margin-top:30px;
+    top: 50px;
     left: 16px;
 
     border:1px solid;
@@ -28,11 +29,12 @@ a {
 
 #chatContainer{
     display: inline-block;
-
+    width:45%;
     position: absolute;
-    top: 10px;
+    margin-top:30px;
+    top: 50px;
     right: 16px;
-    width:40%;
+    
     text-align: center;
     border:1px solid;
     border-radius:10%;
@@ -51,10 +53,17 @@ a {
     padding-top:20px;
     padding-bottom:20px;*/
     font-size:20px;
-    padding:1px;
+    /*padding:1px;*/
+    margin:0px;
     display:inline-block;
     font-family: "Courier";
     /*margin:3px;*/
+}
+
+.newline-board{
+    display: block; /* makes it have a width */
+    content: ""; /* clears default height */
+    margin-top: 5px; /* change this to whatever height you want it */
 }
 
 /*NAVIGATION BAR CSS*/
